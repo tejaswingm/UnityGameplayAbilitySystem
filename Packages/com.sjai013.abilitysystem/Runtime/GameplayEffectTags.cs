@@ -5,7 +5,7 @@ using UnityEngine;
 namespace AbilitySystem
 {
     [Serializable]
-    public class GameplayEffectTags
+    public struct GameplayEffectTags
     {
         /// <summary>
         /// The tag that defines this gameplay effect

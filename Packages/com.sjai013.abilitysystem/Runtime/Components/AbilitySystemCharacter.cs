@@ -13,11 +13,27 @@ namespace AbilitySystem
         [SerializeField]
         protected AttributeSystemComponent _attributeSystem;
         public AttributeSystemComponent AttributeSystem { get { return _attributeSystem; } set { _attributeSystem = value; } }
-        List<GameplayEffectContainer> AppliedGameplayEffects = new List<GameplayEffectContainer>();
-
+        public List<GameplayEffectContainer> AppliedGameplayEffects = new List<GameplayEffectContainer>();
         [SerializeField] protected GameplayEffectScriptableObject[] InitialGameplayEffects;
-        public GameplayEffectScriptableObject Test;
+        public List<AbilitySpec> GrantedAbilities = new List<AbilitySpec>();
         public float Level;
+
+        public void GrantAbility(AbilitySpec spec)
+        {
+            this.GrantedAbilities.Add(spec);
+        }
+
+        public void RemoveAbilitiesWithTag(GameplayTagScriptableObject tag)
+        {
+            for (var i = GrantedAbilities.Count - 1; i >= 0; i--)
+            {
+                if (GrantedAbilities[i].AbilityScriptableObject.AbilityTags.AbilityTag == tag)
+                {
+                    GrantedAbilities.RemoveAt(i);
+                }
+            }
+        }
+
 
         /// <summary>
         /// Applies the gameplay effect spec to self
@@ -43,12 +59,13 @@ namespace AbilitySystem
 
             return true;
         }
-        public GameplayEffectSpec MakeOutgoingSpec(GameplayEffectScriptableObject GameplayEffect, float level = 1f)
+        public GameplayEffectSpec MakeOutgoingSpec(GameplayEffectScriptableObject GameplayEffect, float? level = 1f)
         {
+            level = level ?? this.Level;
             return GameplayEffectSpec.CreateNew(
                 GameplayEffect: GameplayEffect,
                 Source: this,
-                Level: level);
+                Level: level.GetValueOrDefault(1));
         }
 
         public void InitialiseAttributes()
@@ -152,9 +169,9 @@ namespace AbilitySystem
             // Set Current Value to Base Value (default position if there are no GE affecting that atribute)
 
 
-            for (var i = 0; i < AppliedGameplayEffects.Count; i++)
+            for (var i = 0; i < this.AppliedGameplayEffects.Count; i++)
             {
-                var modifiers = AppliedGameplayEffects[i].modifiers;
+                var modifiers = this.AppliedGameplayEffects[i].modifiers;
                 for (var m = 0; m < modifiers.Length; m++)
                 {
                     var modifier = modifiers[m];
@@ -177,7 +194,7 @@ namespace AbilitySystem
 
         void CleanGameplayEffects()
         {
-            this.AppliedGameplayEffects.RemoveAll(x => x.spec.Duration <= 0);
+            this.AppliedGameplayEffects.RemoveAll(x => x.spec.GameplayEffect.gameplayEffect.DurationPolicy == EDurationPolicy.HasDuration && x.spec.Duration <= 0);
         }
 
         void Start()
@@ -193,16 +210,6 @@ namespace AbilitySystem
             TickGameplayEffects();
             CleanGameplayEffects();
         }
-
-        void OnGUI()
-        {
-            if (GUI.Button(new Rect(10, 70, 50, 30), "Click"))
-            {
-                var geSpec = MakeOutgoingSpec(this.Test, level: (int)this.Level);
-                ApplyGameplayEffectSpecToSelf(geSpec);
-            }
-        }
-
     }
 }
 

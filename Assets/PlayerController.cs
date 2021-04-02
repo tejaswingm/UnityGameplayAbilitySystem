@@ -18,11 +18,14 @@ public class PlayerController : MonoBehaviour, DefaultInputActions.IPlayerAction
     private Animator mAnimator;
 
     private Vector2 mMovementVector;
-    private bool mMoving;
+    private bool shouldMove;
 
     private CharacterController controller;
     private Transform cameraTransform;
 
+    private int mAnimator_ShouldMove = Animator.StringToHash("ShouldMove");
+    private int mAnimator_Movement_X = Animator.StringToHash("Movement_X");
+    private int mAnimator_Movement_Y = Animator.StringToHash("Movement_Y");
     public void OnFire(InputAction.CallbackContext context)
     {
     }
@@ -50,9 +53,10 @@ public class PlayerController : MonoBehaviour, DefaultInputActions.IPlayerAction
     void HandleMovement()
     {
         this.isGrounded = this.controller.isGrounded;
-        this.mAnimator.SetBool("Moving", this.mMoving);
-        this.mAnimator.SetFloat("XSpeed", this.mMovementVector.x);
-        this.mAnimator.SetFloat("YSpeed", this.mMovementVector.y);
+        this.mAnimator.SetBool(mAnimator_ShouldMove, this.shouldMove);
+
+        this.mAnimator.SetFloat(this.mAnimator_Movement_X, this.mMovementVector.x);
+        this.mAnimator.SetFloat(this.mAnimator_Movement_Y, this.mMovementVector.y);
 
 
         var movementVector = new Vector3(mMovementVector.x, 0, mMovementVector.y);
@@ -71,11 +75,11 @@ public class PlayerController : MonoBehaviour, DefaultInputActions.IPlayerAction
     void CaptureInputs()
     {
         this.mMovementVector = this.playerInput.Player.Move.ReadValue<Vector2>();
-        this.mMoving = true;
+        this.shouldMove = true;
         if (this.mMovementVector.magnitude < 0.2)
         {
             this.mMovementVector = Vector2.zero;
-            this.mMoving = false;
+            this.shouldMove = false;
         }
 
 
