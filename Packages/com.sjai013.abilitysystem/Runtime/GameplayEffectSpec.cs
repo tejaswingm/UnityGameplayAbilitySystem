@@ -15,8 +15,9 @@ namespace AbilitySystem
         /// <summary>
         /// 
         /// </summary>
-        public float Duration { get; private set; }
-        public GameplayEffectPeriod Period { get; private set; }
+        public float DurationRemaining { get; private set; }
+        public GameplayEffectPeriod PeriodDefinition { get; private set; }
+        public float TimeUntilPeriodTick { get; private set; }
         public float Level { get; private set; }
         public AbilitySystemCharacter Source { get; private set; }
         public AbilitySystemCharacter Target { get; private set; }
@@ -38,7 +39,14 @@ namespace AbilitySystem
             this.Level = Level;
             if (this.GameplayEffect.gameplayEffect.DurationModifier)
             {
-                this.Duration = this.GameplayEffect.gameplayEffect.DurationModifier.CalculateMagnitude(this).GetValueOrDefault() * this.GameplayEffect.gameplayEffect.DurationMultiplier;
+                this.DurationRemaining = this.GameplayEffect.gameplayEffect.DurationModifier.CalculateMagnitude(this).GetValueOrDefault() * this.GameplayEffect.gameplayEffect.DurationMultiplier;
+            }
+
+            this.TimeUntilPeriodTick = this.GameplayEffect.Period.Period;
+            // By setting the time to 0, we make sure it gets executed at first opportunity
+            if (this.GameplayEffect.Period.ExecuteOnApplication)
+            {
+                this.TimeUntilPeriodTick = 0;
             }
         }
 
@@ -50,12 +58,31 @@ namespace AbilitySystem
 
         public GameplayEffectSpec SetDuration(float duration)
         {
-            this.Duration = duration;
+            this.DurationRemaining = duration;
             return this;
         }
-        public GameplayEffectSpec Tick(float deltaTime)
+
+        public GameplayEffectSpec UpdateRemainingDuration(float deltaTime)
         {
-            this.Duration -= deltaTime;
+            this.DurationRemaining -= deltaTime;
+            return this;
+        }
+
+        public GameplayEffectSpec TickPeriodic(float deltaTime, out bool executePeriodicTick)
+        {
+            this.TimeUntilPeriodTick -= deltaTime;
+            executePeriodicTick = false;
+            if (this.TimeUntilPeriodTick <= 0)
+            {
+                this.TimeUntilPeriodTick = this.GameplayEffect.Period.Period;
+
+                // Check to make sure period is valid, otherwise we'd just end up executing every frame
+                if (this.GameplayEffect.Period.Period > 0)
+                {
+                    executePeriodicTick = true;
+                }
+            }
+
             return this;
         }
 

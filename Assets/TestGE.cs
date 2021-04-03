@@ -18,7 +18,7 @@ public class TestGE : MonoBehaviour
     void OnGUI()
     {
         var abilityCd = this.character.GrantedAbilities[0].CheckCooldown();
-        if (abilityCd != null) return;
+        if (abilityCd > 0) return;
         if (GUI.Button(new Rect(10, 70, 50, 30), "Click"))
         {
             var geSpec = character.MakeOutgoingSpec(this.Test);

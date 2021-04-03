@@ -76,15 +76,12 @@ namespace AbilitySystem
                 var spec = MakeOutgoingSpec(this.InitialGameplayEffects[i], (int)this.Level);
                 this.ApplyGameplayEffectSpecToSelf(spec);
                 AttributeSystem.UpdateCurrentAttributeValues();
-                this.UpdateAttributeSystem();
             }
         }
 
 
         bool CheckTagRequirementsMet(GameplayEffectSpec geSpec)
         {
-            bool bApplyGE = true;
-
             /// Build temporary list of all gametags currently applied
             var appliedTags = new List<GameplayTagScriptableObject>();
             for (var i = 0; i < AppliedGameplayEffects.Count; i++)
@@ -112,7 +109,7 @@ namespace AbilitySystem
                 }
             }
 
-            return bApplyGE;
+            return true;
         }
 
         void ApplyInstantGameplayEffect(GameplayEffectSpec spec)
@@ -185,16 +182,25 @@ namespace AbilitySystem
             for (var i = 0; i < this.AppliedGameplayEffects.Count; i++)
             {
                 var ge = this.AppliedGameplayEffects[i].spec;
-                if (ge.GameplayEffect.gameplayEffect.DurationPolicy == EDurationPolicy.HasDuration)
+
+                // Can't tick instant GE
+                if (ge.GameplayEffect.gameplayEffect.DurationPolicy == EDurationPolicy.Instant) continue;
+
+                // Update time remaining.  Stritly, it's only really valid for durational GE, but calculating for infinite GE isn't harmful
+                ge.UpdateRemainingDuration(Time.deltaTime);
+
+                // Tick the periodic component
+                ge.TickPeriodic(Time.deltaTime, out var executePeriodicTick);
+                if (executePeriodicTick)
                 {
-                    ge.Tick(Time.deltaTime);
+                    ApplyInstantGameplayEffect(ge);
                 }
             }
         }
 
         void CleanGameplayEffects()
         {
-            this.AppliedGameplayEffects.RemoveAll(x => x.spec.GameplayEffect.gameplayEffect.DurationPolicy == EDurationPolicy.HasDuration && x.spec.Duration <= 0);
+            this.AppliedGameplayEffects.RemoveAll(x => x.spec.GameplayEffect.gameplayEffect.DurationPolicy == EDurationPolicy.HasDuration && x.spec.DurationRemaining <= 0);
         }
 
         void Start()

@@ -29,12 +29,12 @@ namespace AbilitySystem.Authoring
         {
             return CheckGameplayTags()
                     && CheckCost()
-                    && CheckCooldown() == null;
+                    && CheckCooldown() <= 0;
         }
 
         public abstract void CancelAbility();
         public abstract bool CheckGameplayTags();
-        public abstract float? CheckCooldown();
+        public abstract float CheckCooldown();
         protected abstract void PreActivate();
         protected abstract void ActivateAbility();
         public abstract bool CheckCost();

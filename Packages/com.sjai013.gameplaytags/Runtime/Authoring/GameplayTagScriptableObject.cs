@@ -11,6 +11,7 @@ namespace GameplayTag.Authoring
         private GameplayTagScriptableObject _parent;
         public GameplayTagScriptableObject Parent { get { return _parent; } }
 
+
         /// <summary>
         /// Check is this gameplay tag is a descendant of another gameplay tag
         /// </summary>

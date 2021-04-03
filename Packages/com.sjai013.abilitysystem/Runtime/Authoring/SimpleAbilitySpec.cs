@@ -1,5 +1,3 @@
-using GameplayTag.Authoring;
-
 namespace AbilitySystem.Authoring
 {
     public class SimpleAbilitySpec : AbilitySpec
@@ -46,18 +44,15 @@ namespace AbilitySystem.Authoring
                     && AscHasNoneTags(target, this.AbilityScriptableObject.AbilityTags.TargetTags.IgnoreTags);
         }
 
-        public override float? CheckCooldown()
+        public override float CheckCooldown()
         {
             var cooldownTags = this.AbilityScriptableObject.Cooldown.gameplayEffectTags.GrantedTags;
 
-            float? longestCooldown = null;
+            float longestCooldown = 0f;
 
             // Check if the cooldown tag is granted to the player, and if so, capture the remaining duration for that tag
             for (var i = 0; i < this.Owner.AppliedGameplayEffects.Count; i++)
             {
-                // Only durational effects are useful here, so ignore all others
-                if (this.Owner.AppliedGameplayEffects[i].spec.GameplayEffect.gameplayEffect.DurationPolicy != EDurationPolicy.HasDuration) continue;
-
                 var grantedTags = this.Owner.AppliedGameplayEffects[i].spec.GameplayEffect.gameplayEffectTags.GrantedTags;
                 for (var iTag = 0; iTag < grantedTags.Length; iTag++)
                 {
@@ -65,9 +60,12 @@ namespace AbilitySystem.Authoring
                     {
                         if (grantedTags[iTag] == cooldownTags[iCooldownTag])
                         {
-                            var durationRemaining = this.Owner.AppliedGameplayEffects[i].spec.Duration;
+                            // If this is an infinite GE, then return null to signify this is on CD
+                            if (this.Owner.AppliedGameplayEffects[i].spec.GameplayEffect.gameplayEffect.DurationPolicy == EDurationPolicy.Infinite) return float.MaxValue;
 
-                            if (longestCooldown == null || durationRemaining < longestCooldown)
+                            var durationRemaining = this.Owner.AppliedGameplayEffects[i].spec.DurationRemaining;
+
+                            if (durationRemaining > longestCooldown)
                             {
                                 longestCooldown = durationRemaining;
                             }

@@ -41,8 +41,6 @@ GameObject:
   - component: {fileID: 1811571462}
   - component: {fileID: 1811571463}
   - component: {fileID: 1811571466}
-  - component: {fileID: 1811571464}
-  - component: {fileID: 1811571465}
   m_Layer: 0
   m_Name: AbilitySystem
   m_TagString: Untagged
@@ -96,40 +94,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _attributeSystem: {fileID: 1811571463}
   InitialGameplayEffects: []
-  Test: {fileID: 11400000, guid: 7e015791d2fdea047829efe0e6fa6126, type: 2}
   Level: 5
---- !u!114 &1811571464
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1811571461}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a022c94d427069c4b854aaa5f5b5036b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  attributeSystemComponent: {fileID: 1811571463}
-  attributeUI: {fileID: 0}
-  currentAttribute: {fileID: 0}
-  maxAttribute: {fileID: 11400000, guid: 66c8df61fea9407488df5899c5bda693, type: 2}
---- !u!114 &1811571465
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1811571461}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a022c94d427069c4b854aaa5f5b5036b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  attributeSystemComponent: {fileID: 1811571463}
-  attributeUI: {fileID: 0}
-  currentAttribute: {fileID: 11400000, guid: 8f8b14a27b4879f458889e803445051b, type: 2}
-  maxAttribute: {fileID: 0}
 --- !u!1 &113054913794530298
 GameObject:
   m_ObjectHideFlags: 0
@@ -2242,6 +2207,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 081ec934094377f4980b447b84dbce43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerSpeed: 2
+  isGrounded: 0
+  rotationSpeed: 5
 --- !u!1 &4921119986479013336
 GameObject:
   m_ObjectHideFlags: 0
