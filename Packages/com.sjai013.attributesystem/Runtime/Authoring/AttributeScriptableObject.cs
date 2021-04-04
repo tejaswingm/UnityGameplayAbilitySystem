@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using AttributeSystem.Components;
@@ -6,6 +7,14 @@ using UnityEngine;
 
 namespace AttributeSystem.Authoring
 {
+    public class PreAttributeChangeEventArgs : EventArgs
+    {
+        AttributeSystemComponent attributeSystem { get; set; }
+        float value { get; set; }
+    }
+
+    public delegate void _PreAttributeChangeEventArgs(AttributeSystemComponent attributeSystem, AttributeScriptableObject attribute, float value, out float newValue);
+
     /// <summary>
     /// This asset defines a single player attribute
     /// </summary>
@@ -16,6 +25,14 @@ namespace AttributeSystem.Authoring
         /// Friendly name of this attribute.  Used for dislpay purposes only.
         /// </summary>
         public string Name;
+
+        public event EventHandler PreAttributeChange;
+
+        public void OnPreAttributeChange(object sender, PreAttributeChangeEventArgs e)
+        {
+            EventHandler handler = PreAttributeChange;
+            PreAttributeChange?.Invoke(sender, e);
+        }
 
         public virtual AttributeValue CalculateInitialValue(AttributeValue attributeValue, List<AttributeValue> otherAttributeValues)
         {

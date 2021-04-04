@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 36fd283322353ff42b30cd679073251e, type: 3}
-  m_Name: ManaRegen
+  m_Name: HealthRegen
   m_EditorClassIdentifier: 
   gameplayEffect:
     DurationPolicy: 1
     DurationModifier: {fileID: 0}
     DurationMultiplier: 0
     Modifiers:
-    - Attribute: {fileID: 11400000, guid: 8f8b14a27b4879f458889e803445051b, type: 2}
+    - Attribute: {fileID: 11400000, guid: 66c8df61fea9407488df5899c5bda693, type: 2}
       ModifierOperator: 0
-      ModifierMagnitude: {fileID: 11400000, guid: 0e7d39ed6eaed954b8e73dd84401c6ef, type: 2}
+      ModifierMagnitude: {fileID: 11400000, guid: 960491bbb63a1004dad0ceb512630112, type: 2}
       Multiplier: 1
     ConditionalGameplayEffects: []
   gameplayEffectTags:

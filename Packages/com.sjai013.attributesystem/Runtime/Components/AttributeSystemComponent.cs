@@ -4,11 +4,15 @@ using UnityEngine;
 
 namespace AttributeSystem.Components
 {
+
     /// <summary>
     /// Manages the attributes for a game character
     /// </summary>
     public class AttributeSystemComponent : MonoBehaviour
     {
+        [SerializeField]
+        private AbstractAttributeEventHandler[] AttributeSystemEvents;
+
         /// <summary>
         /// Attribute sets assigned to the game character
         /// </summary>
@@ -19,7 +23,7 @@ namespace AttributeSystem.Components
         private List<AttributeValue> AttributeValues;
 
         private bool mAttributeDictStale;
-        private Dictionary<AttributeScriptableObject, int> mAttributeIndexCache = new Dictionary<AttributeScriptableObject, int>();
+        public Dictionary<AttributeScriptableObject, int> mAttributeIndexCache { get; private set; } = new Dictionary<AttributeScriptableObject, int>();
 
         /// <summary>
         /// Marks attribute cache dirty, so it can be recreated next time it is required
@@ -74,7 +78,7 @@ namespace AttributeSystem.Components
         /// <param name="modifierType">How to modify the attribute</param>
         /// <param name="value">Copy of newly modified attribute</param>
         /// <returns>True, if attribute was found.</returns>
-        public bool ModifyAttributeValue(AttributeScriptableObject attribute, AttributeModifier modifier, out AttributeValue value)
+        public bool UpdateAttributeModifiers(AttributeScriptableObject attribute, AttributeModifier modifier, out AttributeValue value)
         {
             // If dictionary is stale, rebuild it
             var attributeCache = GetAttributeCache();
@@ -172,12 +176,20 @@ namespace AttributeSystem.Components
             }
         }
 
-        public void UpdateCurrentAttributeValues()
+        private List<AttributeValue> prevAttributeValues = new List<AttributeValue>();
+        public void UpdateAttributeCurrentValues()
         {
+            prevAttributeValues.Clear();
             for (var i = 0; i < this.AttributeValues.Count; i++)
             {
                 var _attribute = this.AttributeValues[i];
+                prevAttributeValues.Add(_attribute);
                 this.AttributeValues[i] = _attribute.Attribute.CalculateCurrentAttributeValue(_attribute, this.AttributeValues);
+            }
+
+            for (var i = 0; i < this.AttributeSystemEvents.Length; i++)
+            {
+                this.AttributeSystemEvents[i].PreAttributeChange(this, prevAttributeValues, ref this.AttributeValues);
             }
         }
 
@@ -204,7 +216,7 @@ namespace AttributeSystem.Components
 
         private void LateUpdate()
         {
-            UpdateCurrentAttributeValues();
+            UpdateAttributeCurrentValues();
         }
 
 

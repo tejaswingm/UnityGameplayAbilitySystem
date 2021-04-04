@@ -41,6 +41,7 @@ namespace AbilitySystem
         /// <param name="geSpec">GameplayEffectSpec to apply</param>
         public bool ApplyGameplayEffectSpecToSelf(GameplayEffectSpec geSpec)
         {
+            if (geSpec == null) return true;
             bool tagRequirementsOK = CheckTagRequirementsMet(geSpec);
 
             if (tagRequirementsOK == false) return false;
@@ -62,23 +63,12 @@ namespace AbilitySystem
         public GameplayEffectSpec MakeOutgoingSpec(GameplayEffectScriptableObject GameplayEffect, float? level = 1f)
         {
             level = level ?? this.Level;
+            if (GameplayEffect == null) return null;
             return GameplayEffectSpec.CreateNew(
                 GameplayEffect: GameplayEffect,
                 Source: this,
                 Level: level.GetValueOrDefault(1));
         }
-
-        public void InitialiseAttributes()
-        {
-            this.AttributeSystem.ResetAll();
-            for (var i = 0; i < this.InitialGameplayEffects.Length; i++)
-            {
-                var spec = MakeOutgoingSpec(this.InitialGameplayEffects[i], (int)this.Level);
-                this.ApplyGameplayEffectSpecToSelf(spec);
-                AttributeSystem.UpdateCurrentAttributeValues();
-            }
-        }
-
 
         bool CheckTagRequirementsMet(GameplayEffectSpec geSpec)
         {
@@ -172,7 +162,7 @@ namespace AbilitySystem
                 for (var m = 0; m < modifiers.Length; m++)
                 {
                     var modifier = modifiers[m];
-                    AttributeSystem.ModifyAttributeValue(modifier.Attribute, modifier.Modifier, out _);
+                    AttributeSystem.UpdateAttributeModifiers(modifier.Attribute, modifier.Modifier, out _);
                 }
             }
         }
@@ -203,10 +193,6 @@ namespace AbilitySystem
             this.AppliedGameplayEffects.RemoveAll(x => x.spec.GameplayEffect.gameplayEffect.DurationPolicy == EDurationPolicy.HasDuration && x.spec.DurationRemaining <= 0);
         }
 
-        void Start()
-        {
-            InitialiseAttributes();
-        }
         void Update()
         {
             // Reset all attributes to 0

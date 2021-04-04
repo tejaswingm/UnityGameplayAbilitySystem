@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using AbilitySystem;
 using AbilitySystem.Authoring;
+using AttributeSystem.Components;
 using UnityEngine;
 
 public class TestGE : MonoBehaviour
@@ -26,4 +27,6 @@ public class TestGE : MonoBehaviour
             this.character.GrantedAbilities[0].TryActivateAbility();
         }
     }
+
+
 }

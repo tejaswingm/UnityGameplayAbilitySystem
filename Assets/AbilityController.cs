@@ -16,6 +16,10 @@ public class AbilityController : MonoBehaviour
         var spec = Abilities[0].CreateSpec(this.abilitySystemCharacter);
         this.abilitySystemCharacter.GrantAbility(spec);
 
+        spec = Abilities[1].CreateSpec(this.abilitySystemCharacter);
+        this.abilitySystemCharacter.GrantAbility(spec);
+        spec.TryActivateAbility();
+
     }
 
     // Update is called once per frame
