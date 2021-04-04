@@ -552,7 +552,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 223301083}
-  m_LocalRotation: {x: -0.01899843, y: -0, z: -0, w: 0.9998195}
+  m_LocalRotation: {x: -0.018998435, y: -7.7139395e-10, z: -1.4657926e-11, w: 0.9998196}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1657,7 +1657,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1127585655}
-  m_LocalRotation: {x: -0.03632495, y: 1e-45, z: -0, w: 0.99934006}
+  m_LocalRotation: {x: -0.036324956, y: 1.1450636e-15, z: 3.7200926e-17, w: 0.99934006}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -2413,7 +2413,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be76e5f14cfee674cb30b491fb72b09b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boost: -24.1
+  boost: -19.3
   positionLerpTime: 0.2
   mouseSensitivityCurve:
     serializedVersion: 2
@@ -2491,7 +2491,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1687258581}
-  m_LocalRotation: {x: -0.03632495, y: -0, z: -0, w: 0.99934006}
+  m_LocalRotation: {x: -0.036324956, y: 1.1452246e-15, z: 4.1627706e-17, w: 0.99934006}
   m_LocalPosition: {x: -0.37389755, y: -0.47991168, z: -4.25075}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
